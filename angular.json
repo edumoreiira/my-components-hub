@@ -32,7 +32,8 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/@flaticon/flaticon-uicons/css/all/all.css"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
