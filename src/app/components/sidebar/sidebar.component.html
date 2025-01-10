@@ -1,5 +1,5 @@
 <div class="flex flex-col h-screen bg-gray-100 text-neutral-700">
-    <div class="px-5 h-16 py-2 bg-gray-100 gap-4 w-full flex justify-between items-center">
+    <div class="px-5 h-16 py-2 gap-4 w-full flex justify-between items-center">
         <div class="flex items-center gap-4">
             <div class="cursor-pointer" (click)="toggleSidebar()">
                 <i class="fi fi-sr-menu-burger flex text-lg"></i>
@@ -26,22 +26,38 @@
     </div>
 
     <div class="flex w-full grow">
-        <aside class="bg-gray-100 transition-all" [ngClass]="isCollapsed ? 'w-16' : 'w-64'">
+        <aside class="transition-all duration-300" [ngClass]="isCollapsed ? 'w-16' : 'w-64'">
             <div class="py-4">
-                <div class=" px-6 mb-4 flex items-center justify-between">
-                    <span class="uppercase font-semibold">Menu</span>
-                    <i class="fi fi-rr-caret-down"></i>
-                </div>
-                <ul class="flex flex-col gap-2">
-                    <li class=" pr-4 pl-5 py-2 mr-4 rounded-r-2xl flex gap-3 items-center">
-                        <i class="fi fi-sr-house-chimney flex text-2xl"></i>
-                        <a class="text-lg overflow-hidden overflow-ellipsis whitespace-nowrap" href="#">Home</a>
-                    </li>
-                    <li class="bg-gray-200 pr-4 pl-5 py-2 mr-4 rounded-r-2xl flex gap-3 items-center">
-                        <i class="fi fi-ss-dashboard flex text-2xl"></i>
-                        <a class="text-lg overflow-hidden overflow-ellipsis whitespace-nowrap" href="#">Dashboard</a>
-                    </li>
-                </ul>
+                @for (section of navbarSections(); track $index) {
+                    @if (isCollapsed) {
+                        <div class="px-4 mb-2 flex items-center justify-center hover:text-gray-400 cursor-pointer transition-colors"
+                        (click)="section.collapsed = !section.collapsed">
+                            <i class="fi fi-rr-caret-up flex text-lg transition-transform"
+                            [ngClass]="section.collapsed ? 'rotate-180' : ''"></i>
+                        </div>
+                    }@else {
+                        <div class="px-5 mb-2 flex items-center justify-between hover:text-gray-400 cursor-pointer transition-colors"
+                        (click)="section.collapsed = !section.collapsed">
+                            <span class="uppercase font-semibold whitespace-nowrap text-sm">{{section.label}}</span>
+                            <i class="fi fi-rr-caret-up flex transition-transform"
+                            [ngClass]="section.collapsed ? 'rotate-180' : ''"></i>
+                        </div>
+                    }
+                    @if(section.collapsed) {
+
+                    }@else {
+                        <ul class="flex flex-col gap-1 overflow-hidden" @navbarCollapseAnimation>
+                            @for (item of section.items ; track $index) {
+                                <li class="pr-4 pl-5 py-2 rounded-r-2xl flex gap-3 items-center cursor-pointer hover:bg-gray-200 transition-all"
+                                [ngClass]="isCollapsed ? 'mr-1' : 'mr-4'">
+                                    <i class="fi {{item.icon}} flex text-[1.4rem]"></i>
+                                    <a class="text-base overflow-hidden overflow-ellipsis whitespace-nowrap" href="#">{{item.name}}</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    <hr class=" border-gray-200 my-2" [ngClass]="isCollapsed ? 'mx-2' : 'mx-5'">
+                }
             </div>
         </aside>
 
