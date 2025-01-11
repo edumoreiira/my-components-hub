@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, input } from '@angular/core';
 import { NavbarSections } from '../../models/navbar-items.interface';
 import { navbarItemCollapseAnimation, navbarSidebarSlideInOutAnimation } from '../../animations/navbar-transitions.animations';
+import exp from 'constants';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,10 +16,27 @@ export class SidebarComponent {
   navbarSections = input<NavbarSections[]>()
   smallScreen = false;
   isCollapsed = false;
+  isAutoExpanded = false;
+  navbarTimeoutId: any;
 
   constructor() {
     if(typeof window !== 'undefined') {
       this.checkMobileScreenSize();
+    }
+  }
+
+  onMouseEnterSidebar(): void {
+    this.navbarTimeoutId = setTimeout(() => {
+      this.autoExpandSidebar();
+    }, 700);
+  }
+
+  onMouseLeaveSidebar(): void {
+    if(this.navbarTimeoutId) {
+      clearTimeout(this.navbarTimeoutId);
+      if(this.isAutoExpanded) {
+        this.autoCollapseSidebar();
+      }
     }
   }
 
@@ -37,6 +55,16 @@ export class SidebarComponent {
   
   expandSidebar() {
     this.isCollapsed = false;
+  }
+
+  autoExpandSidebar() {
+    this.expandSidebar();
+    this.isAutoExpanded = true;
+  }
+
+  autoCollapseSidebar() {
+    this.collapseSidebar();
+    this.isAutoExpanded = false;
   }
 
   toggleSidebar() {
