@@ -35,28 +35,36 @@
                 <div class="py-4">
                     @for (section of navbarSections(); track $index) {
                         @if (isCollapsed) {
-                            <div class="px-4 mb-2 flex items-center justify-center hover:text-gray-400 cursor-pointer transition-colors"
+                            <button class="px-4 mb-2 w-full flex items-center justify-center hover:text-gray-400 cursor-pointer transition-colors"
                             (click)="section.collapsed = !section.collapsed">
                                 <i class="fi fi-rr-caret-down flex text-lg transition-transform"
                                 [ngClass]="section.collapsed ? 'rotate-180' : ''"></i>
-                            </div>
+                            </button>
                         }@else {
-                            <div class="px-5 mb-2 flex items-center justify-between hover:text-gray-400 cursor-pointer transition-colors"
+                            <button class="px-5 mb-2 w-full flex items-center justify-between hover:text-gray-400 cursor-pointer transition-colors"
                             (click)="section.collapsed = !section.collapsed">
                                 <span class="uppercase font-semibold whitespace-nowrap text-sm">{{section.label}}</span>
                                 <i class="fi fi-rr-caret-down flex transition-transform"
                                 [ngClass]="section.collapsed ? 'rotate-180' : ''"></i>
-                            </div>
+                            </button>
                         }
                         @if(section.collapsed) {
-    
+                            <!-- empty -->
                         }@else {
+                            <!-- sidebar items -->
                             <ul class="flex flex-col gap-1 overflow-hidden" @navbarItemCollapseAnimation>
                                 @for (item of section.items ; track $index) {
                                     <li class="pr-4 pl-5 py-2 rounded-r-2xl flex gap-3 items-center cursor-pointer hover:bg-gray-200 transition-all"
-                                    [ngClass]="isCollapsed ? 'mr-1' : 'mr-4'">
+                                    [ngClass]="{
+                                        'mr-1' : isCollapsed,
+                                        'mr-4': !isCollapsed,
+                                        'bg-gray-200' : currentRoute.includes(item.route),
+                                        'hover:bg-gray-300': currentRoute.includes(item.route)
+                                        }"
+                                    role="link" [routerLink]="item.route"
+                                    (keydown)="onKeyPressed($event, item.route)">
                                         <i class="fi {{item.icon}} flex text-[1.4rem]"></i>
-                                        <a class="text-base overflow-hidden overflow-ellipsis whitespace-nowrap" href="#">{{item.name}}</a>
+                                        <a class="text-base overflow-hidden overflow-ellipsis whitespace-nowrap">{{item.name}}</a>
                                     </li>
                                 }
                             </ul>

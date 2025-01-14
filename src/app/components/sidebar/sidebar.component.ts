@@ -1,28 +1,35 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, input } from '@angular/core';
+import { Component, HostListener, input, OnInit } from '@angular/core';
 import { NavbarSections } from '../../models/navbar-items.interface';
 import { navbarItemCollapseAnimation, navbarSidebarSlideInOutAnimation } from '../../animations/navbar-transitions.animations';
-import exp from 'constants';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
   animations: [navbarItemCollapseAnimation, navbarSidebarSlideInOutAnimation]
 })
 
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   navbarSections = input<NavbarSections[]>()
   smallScreen = false;
   isCollapsed = false;
   isAutoExpanded = false;
   navbarTimeoutId: any;
+  currentRoute = '';
 
-  constructor() {
+  constructor(private router: Router) {
     if(typeof window !== 'undefined') {
       this.checkMobileScreenSize();
     }
+  }
+
+  ngOnInit(): void {
+    this.router.events.subscribe(() => {
+      this.currentRoute = this.router.url;
+    })
   }
 
   onMouseEnterSidebar(): void {
@@ -69,5 +76,16 @@ export class SidebarComponent {
 
   toggleSidebar() {
     this.isCollapsed ? this.expandSidebar() : this.collapseSidebar();
+  }
+
+  changeRoute(route:string){
+    this.router.navigate([route]);
+  }
+
+  onKeyPressed(event:KeyboardEvent, route:string){
+    if(event.code === 'Enter' || event.code === 'Space') {
+      this.changeRoute(route);
+      event.preventDefault();
+    }
   }
 }
