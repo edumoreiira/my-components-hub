@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, input, OnInit } from '@angular/core';
-import { NavbarSections } from '../../models/navbar-items.interface';
-import { navbarItemCollapseAnimation, navbarSidebarSlideInOutAnimation } from '../../animations/navbar-transitions.animations';
+import { Component, HostListener, inject, input, OnInit } from '@angular/core';
+import { SidebarSections } from '../../../models/navbar-items.interface';
+import { navbarItemCollapseAnimation, navbarSidebarSlideInOutAnimation } from '../../../animations/navbar-transitions.animations';
 import { Router, RouterLink } from '@angular/router';
+import { PageLayoutService } from '../page-layout.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,19 +14,23 @@ import { Router, RouterLink } from '@angular/router';
 })
 
 export class SidebarComponent implements OnInit {
-  navbarSections = input<NavbarSections[]>()
-  smallScreen = false;
-  isCollapsed = false;
+  private pageLayoutService = inject(PageLayoutService);
+  sidebarSections = input<SidebarSections[]>()
   isAutoExpanded = false;
   navbarTimeoutId: any;
   currentRoute = '';
 
-  constructor(private router: Router) {
-    if(typeof window !== 'undefined') {
-      this.checkMobileScreenSize();
-    }
+  get smallScreen() {
+    return this.pageLayoutService.isSmallScreen;
   }
 
+  get isCollapsed() {
+    return this.pageLayoutService.isSidebarCollapsed;
+  }
+
+  constructor(private router: Router) {
+  }
+  
   ngOnInit(): void {
     this.router.events.subscribe(() => {
       this.currentRoute = this.router.url;
@@ -47,21 +52,12 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  @HostListener('window:resize', ['$event']) //keep track of window resize
-  onResize(): void {
-    this.checkMobileScreenSize();
-  }
-
-  private checkMobileScreenSize(): void {
-    this.smallScreen = window.innerWidth < 640; //turns true if window width < 640px
-  }
-
   collapseSidebar() {
-    this.isCollapsed = true;
+    this.pageLayoutService.collapseSidebar();
   }
   
   expandSidebar() {
-    this.isCollapsed = false;
+    this.pageLayoutService.expandSidebar();
   }
 
   autoExpandSidebar() {

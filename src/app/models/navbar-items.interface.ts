@@ -1,10 +1,10 @@
-export interface NavbarSections {
+export interface SidebarSections {
     label: string;
     collapsed: boolean;
-    items: NavbarItem[];
+    items: SidebarItem[];
 }
 
-export interface NavbarItem {
+export interface SidebarItem {
     name: string;
     icon: string;
     route: string;

@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { NavbarSections } from './models/navbar-items.interface';
+import { SidebarSections } from './models/navbar-items.interface';
+import { PageLayoutComponent } from "./components/page-layout/page-layout.component";
 
 @Component({
   selector: 'app-root',
-  imports: [SidebarComponent],
+  imports: [PageLayoutComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'sidebar';
 
-  navbarSections: NavbarSections[] = [
+  sidebarSections: SidebarSections[] = [
     {label: 'Menu', collapsed: false, items: [
       {name: 'Home', icon: 'fi-sr-house-chimney', route: '/home'},
       {name: 'Crypto Overview', icon: 'fi-sr-chart-simple', route: '/overview'},
