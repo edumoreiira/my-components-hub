@@ -3,6 +3,8 @@ Aqui serão armazenados **componentes front-end** criados por mim, geralmente ut
 
 > Uma branch contendo os arquivos do projeto será disponibilizada para cada componente criado neste repositório.
 
+***
+
 # Welcome to My Components Hub — EN/US
 Here, I will store **front-end components** created by me, usually using **Angular** and **Tailwind**.
 
