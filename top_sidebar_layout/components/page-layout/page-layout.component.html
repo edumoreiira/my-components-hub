@@ -1,0 +1,17 @@
+<div class="flex flex-col h-screen bg-gray-100 text-neutral-700">
+    <app-top-bar></app-top-bar>
+
+    <div class="flex w-full grow">
+        @if (smallScreen === true && isCollapsed === true) {
+            <!-- it will not display sidebar -->
+        } @else {
+            <app-sidebar [sidebarSections]="sidebarSections()"></app-sidebar>
+        }
+        <div class="border border-gray-300 grow bg-white transition-all duration-300"
+        [ngClass]="{
+            'rounded-tl-3xl': !smallScreen || (smallScreen && !isCollapsed),
+        }">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>
